@@ -1,0 +1,14 @@
+{
+  "endpoint_slm": "http://localhost:11434/api/generate",
+  "modelo_slm": "phi3",
+  "regras_conformidade": [
+    {
+      "id_regra": "TESTE-EXCEL-ESPELHO",
+      "tipo_arquivo": "excel",
+      "nome_arquivo_esperado": "matriz_riscos.xlsx",
+      "obrigatorio": true,
+      "aba_planilha": "Riscos_Projeto",
+      "prompt_ia": "Retorne estritamente o texto bruto abaixo, nada a+, ESTRITAMENTE O TEXTO, agindo como um espelho perfeito:"
+    }
+  ]
+}

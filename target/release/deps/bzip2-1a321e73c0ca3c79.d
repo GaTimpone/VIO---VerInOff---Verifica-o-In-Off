@@ -1,0 +1,11 @@
+C:\Users\gabri\OneDrive\Documentos\GitHub\VIO - VerInOff - Verificação In Off\target\release\deps\bzip2-1a321e73c0ca3c79.d: C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\lib.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\mem.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\bufread.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\read.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\write.rs
+
+C:\Users\gabri\OneDrive\Documentos\GitHub\VIO - VerInOff - Verificação In Off\target\release\deps\libbzip2-1a321e73c0ca3c79.rlib: C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\lib.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\mem.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\bufread.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\read.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\write.rs
+
+C:\Users\gabri\OneDrive\Documentos\GitHub\VIO - VerInOff - Verificação In Off\target\release\deps\libbzip2-1a321e73c0ca3c79.rmeta: C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\lib.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\mem.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\bufread.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\read.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\write.rs
+
+C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\lib.rs:
+C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\mem.rs:
+C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\bufread.rs:
+C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\read.rs:
+C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\bzip2-0.5.2\src\write.rs:

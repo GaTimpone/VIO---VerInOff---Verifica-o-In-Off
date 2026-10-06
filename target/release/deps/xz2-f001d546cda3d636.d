@@ -1,0 +1,11 @@
+C:\Users\gabri\OneDrive\Documentos\GitHub\VIO - VerInOff - Verificação In Off\target\release\deps\xz2-f001d546cda3d636.d: C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\lib.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\stream.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\bufread.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\read.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\write.rs
+
+C:\Users\gabri\OneDrive\Documentos\GitHub\VIO - VerInOff - Verificação In Off\target\release\deps\libxz2-f001d546cda3d636.rlib: C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\lib.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\stream.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\bufread.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\read.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\write.rs
+
+C:\Users\gabri\OneDrive\Documentos\GitHub\VIO - VerInOff - Verificação In Off\target\release\deps\libxz2-f001d546cda3d636.rmeta: C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\lib.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\stream.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\bufread.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\read.rs C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\write.rs
+
+C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\lib.rs:
+C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\stream.rs:
+C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\bufread.rs:
+C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\read.rs:
+C:\Users\gabri\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\xz2-0.1.7\src\write.rs:
