@@ -1,6 +1,6 @@
 use clap::Parser;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::{Command, Child};
 use std::net::TcpStream;
 use std::time::Duration;
@@ -73,6 +73,12 @@ struct ArgumentosCli {
 
     #[arg(long, help = "Ativa ou desativa permanentemente o modo silencioso")]
     toggle_quiet: bool,
+
+    #[arg(long, help = "Exporta o relatório gerado para um arquivo CSV")]
+    exportar_csv: bool,
+
+    #[arg(long, help = "Caminho específico para salvar o CSV (ex: C:\\Relatorios\\saida.csv)")]
+    saida_csv: Option<String>,
 }
 
 #[derive(serde::Serialize)]
@@ -162,12 +168,14 @@ async fn main() {
         return;
     }
 
+    // Busca Flexível (Não liga para Maiúsculas e Minúsculas graças ao LIKE)
     if args.mostrar_banco {
         let mut sql = "SELECT projeto, fase_json, id_regra, status, desvio, sugestao FROM historico_auditoria WHERE 1=1".to_string();
         let mut params: Vec<String> = Vec::new();
-        if let Some(ref p) = args.projeto { sql.push_str(" AND projeto = ?"); params.push(p.clone()); }
-        if let Some(ref f) = args.fase { sql.push_str(" AND fase_json = ?"); params.push(f.clone()); }
+        if let Some(ref p) = args.projeto { sql.push_str(" AND projeto LIKE ?"); params.push(format!("%{}%", p)); }
+        if let Some(ref f) = args.fase { sql.push_str(" AND fase_json LIKE ?"); params.push(format!("%{}%", f)); }
         if let Some(ref r) = args.id_regra { sql.push_str(" AND id_regra LIKE ?"); params.push(format!("%{}%", r)); }
+        
         let mut stmt = conexao_db.prepare(&sql).unwrap();
         let auditorias = stmt.query_map(rusqlite::params_from_iter(params), |row| {
             Ok(format!("PROJ: {} | STATUS: {:<12} | REGRA: {}\n -> DESVIO: {}\n -> SUGESTÃO: {}\n", row.get::<_, String>(0)?, row.get::<_, String>(3)?, row.get::<_, String>(2)?, row.get::<_, String>(4)?, row.get::<_, String>(5)?))
@@ -176,12 +184,13 @@ async fn main() {
         return;
     }
 
+    // Relatório Flexível
     if args.gerar_relatorio {
         let mut sql = "SELECT projeto, fase_json, id_regra, status, desvio, sugestao FROM historico_auditoria WHERE 1=1".to_string();
         let mut params: Vec<String> = Vec::new();
 
-        if let Some(ref p) = args.projeto { sql.push_str(" AND projeto = ?"); params.push(p.clone()); }
-        if let Some(ref f) = args.fase { sql.push_str(" AND fase_json = ?"); params.push(f.clone()); }
+        if let Some(ref p) = args.projeto { sql.push_str(" AND projeto LIKE ?"); params.push(format!("%{}%", p)); }
+        if let Some(ref f) = args.fase { sql.push_str(" AND fase_json LIKE ?"); params.push(format!("%{}%", f)); }
 
         let mut stmt = conexao_db.prepare(&sql).unwrap();
         let auditorias = stmt.query_map(rusqlite::params_from_iter(params), |row| {
@@ -212,17 +221,42 @@ async fn main() {
 
         let indicador = if qtd_valido > 0.0 { (qtd_sim / qtd_valido) * 100.0 } else { 0.0 };
 
-        println!("\n=======================================================================================================================================");
-        println!("                                          RELATÓRIO DE CONFORMIDADE (GERADO VIA BANCO)");
-        println!("=======================================================================================================================================");
-        println!("Aderência : {:.1}% (Indicador do Processo SpinOff)", indicador);
-        println!("---------------------------------------------------------------------------------------------------------------------------------------");
-        println!("{:<50} | {:<13} | {:<30} | {}", "PERGUNTA", "STATUS", "DESVIO", "SUGESTÃO");
-        println!("---------------------------------------------------------------------------------------------------------------------------------------");
+        println!("\n====================================================================================================");
+        println!("                                  RELATÓRIO DE CONFORMIDADE (VIA BANCO)");
+        println!("====================================================================================================");
+        println!("Aderência : {:.1}% (Indicador do Processo)", indicador);
+        println!("----------------------------------------------------------------------------------------------------");
+        
         for reg in &registros {
-            println!("{:<50} | {:<13} | {:<30} | {}", truncar(&reg.2, 50), reg.3, truncar(&reg.4, 30), truncar(&reg.5, 35));
+            println!("[{:<12}] {}", reg.3, reg.2);
+            let desvio = reg.4.trim();
+            let sugestao = reg.5.trim();
+            
+            if !desvio.is_empty() && desvio.to_lowercase() != "nenhum" && desvio.to_lowercase() != "nenhuma." {
+                println!("  ↳ Desvio  : {}", desvio);
+            }
+            if !sugestao.is_empty() && sugestao.to_lowercase() != "nenhuma" && sugestao.to_lowercase() != "nenhuma." {
+                println!("  ↳ Sugestão: {}", sugestao);
+            }
+            println!("-");
         }
-        println!("=======================================================================================================================================\n");
+        println!("====================================================================================================\n");
+
+        if args.exportar_csv {
+            let caminho_salvar = args.saida_csv.unwrap_or_else(|| "Relatorio_Auditoria_VIO.csv".to_string());
+            let mut csv_content = String::from("Projeto;Fase;Status;Pergunta;Desvio;Sugestao\n");
+            for reg in &registros {
+                csv_content.push_str(&format!("{};{};{};{};{};{}\n",
+                    reg.0, reg.1, reg.3,
+                    reg.2.replace(";", ","), 
+                    reg.4.replace(";", ",").replace("\n", " "), 
+                    reg.5.replace(";", ",").replace("\n", " ")
+                ));
+            }
+            fs::write(&caminho_salvar, csv_content).expect("Falha ao salvar CSV");
+            let path_absoluto = fs::canonicalize(&caminho_salvar).unwrap_or_else(|_| PathBuf::from(&caminho_salvar));
+            println!("💾 Relatório exportado para Excel com sucesso em:\n   {}", path_absoluto.display());
+        }
         return;
     }
 
@@ -251,8 +285,20 @@ async fn main() {
     for arquivo_json in jsons_para_rodar {
         let caminho_json = pasta_regras.join(&arquivo_json);
         if !caminho_json.exists() { continue; }
-        let conteudo_json = fs::read_to_string(&caminho_json).unwrap();
-        let configuracao: ConfiguracaoGlobal = serde_json::from_str(&conteudo_json).unwrap();
+        
+        let conteudo_json = match fs::read_to_string(&caminho_json) {
+            Ok(c) => c,
+            Err(_) => continue,
+        };
+
+        // Proteção contra JSONs quebrados
+        let configuracao: ConfiguracaoGlobal = match serde_json::from_str(&conteudo_json) {
+            Ok(config) => config,
+            Err(erro) => {
+                println!("⚠️ Pulando o arquivo '{}': Erro na estrutura do JSON ({}).", arquivo_json, erro);
+                continue;
+            }
+        };
         
         if processo_ia_gerenciado.is_none() { processo_ia_gerenciado = gerenciar_motor_ia(&configuracao.endpoint_slm); }
 
@@ -261,7 +307,6 @@ async fn main() {
         let mut memoria_do_projeto = String::new();
         let mut identidade_projeto: String = conexao_db.query_row("SELECT resumo_identidade FROM identidade_projeto WHERE projeto = ?1", [&sigla_projeto], |row| row.get(0)).unwrap_or_default();
 
-        // Regex flexível: aceita "ANALISAÇÃO", "SUGÉSTIMO" e afins, e pega apenas a primeira ocorrência.
         let re = Regex::new(r"(?is)(?:Análise|Analise|ANALISAÇÃO).*?:\s*(.*?)\s*Desvio.*?:\s*(.*?)\s*(?:Sugestão|Sugestao|SUGÉSTAO|SUGÉSTIMO).*?:\s*(.*?)\s*Status Qualitativo.*?:\s*[*_]*\s*(Sim|Não|Nao|Parcialmente)").unwrap();
 
         for regra in configuracao.regras_conformidade {
@@ -321,7 +366,7 @@ async fn main() {
                         let regra_plagio = if identidade_projeto.is_empty() { String::new() } else { format!("IDENTIDADE: '{}'. Reprove se fugir do contexto.\n", identidade_projeto) };
                         let prompt_final = format!("=== HISTÓRICO ===\n{}\n{}\n=== CONTEÚDO ===\n{}\n\n=== INSTRUÇÕES ===\n{}", memoria_do_projeto, regra_plagio, dados_brutos, regra.prompt_ia);
                         let contexto_dinamico = ((memoria_do_projeto.len() + dados_brutos.len()) / 3) as u32 + 2048;
-                        let payload = PayloadOllama { model: configuracao.modelo_slm.clone(), prompt: prompt_final, stream: true, options: OllamaOptions { num_ctx: contexto_dinamico, num_predict: 300, temperature: 0.1, top_k: 10, top_p: 0.5 } };
+                        let payload = PayloadOllama { model: configuracao.modelo_slm.clone(), prompt: prompt_final, stream: true, options: OllamaOptions { num_ctx: contexto_dinamico, num_predict: 150, temperature: 0.0, top_k: 10, top_p: 0.5 } };
                         
                         if let Ok(res) = cliente_http.post(&configuracao.endpoint_slm).json(&payload).send().await {
                             let mut stream = res.bytes_stream();
@@ -388,18 +433,46 @@ async fn main() {
 
             let indicador = if qtd_valido > 0.0 { (qtd_sim / qtd_valido) * 100.0 } else { 0.0 };
 
-            println!("\n=======================================================================================================================================");
+            println!("\n====================================================================================================");
             println!("                                          RELATÓRIO DE CONFORMIDADE ({})", arquivo_json);
-            println!("=======================================================================================================================================");
+            println!("====================================================================================================");
             println!("Projeto   : {}", sigla_projeto);
             println!("Aderência : {:.1}% (Indicador do Processo SpinOff)", indicador);
-            println!("---------------------------------------------------------------------------------------------------------------------------------------");
-            println!("{:<50} | {:<13} | {:<30} | {}", "PERGUNTA", "STATUS", "DESVIO", "SUGESTÃO");
-            println!("---------------------------------------------------------------------------------------------------------------------------------------");
+            println!("----------------------------------------------------------------------------------------------------");
+            
             for reg in &buffer_banco_dados {
-                println!("{:<50} | {:<13} | {:<30} | {}", truncar(&reg.2, 50), reg.4, truncar(&reg.5, 30), truncar(&reg.6, 35));
+                println!("[{:<12}] {}", reg.4, reg.2);
+                let desvio = reg.5.trim();
+                let sugestao = reg.6.trim();
+                
+                if !desvio.is_empty() && desvio.to_lowercase() != "nenhum" && desvio.to_lowercase() != "nenhuma." {
+                    println!("  ↳ Desvio  : {}", desvio);
+                }
+                if !sugestao.is_empty() && sugestao.to_lowercase() != "nenhuma" && sugestao.to_lowercase() != "nenhuma." {
+                    println!("  ↳ Sugestão: {}", sugestao);
+                }
+                println!("-");
             }
-            println!("=======================================================================================================================================\n");
+            println!("====================================================================================================\n");
+
+            if args.exportar_csv {
+                let caminho_salvar = args.saida_csv.clone().unwrap_or_else(|| {
+                    diretorio_alvo_projeto.join(format!("Relatorio_{}_{}.csv", sigla_projeto, arquivo_json.replace(".json", ""))).to_string_lossy().to_string()
+                });
+                
+                let mut csv_content = String::from("Projeto;Fase;Status;Pergunta;Desvio;Sugestao\n");
+                for reg in &buffer_banco_dados {
+                    csv_content.push_str(&format!("{};{};{};{};{};{}\n",
+                        reg.0, reg.1, reg.4,
+                        reg.2.replace(";", ","), 
+                        reg.5.replace(";", ",").replace("\n", " "), 
+                        reg.6.replace(";", ",").replace("\n", " ")
+                    ));
+                }
+                fs::write(&caminho_salvar, csv_content).expect("Falha ao salvar CSV");
+                let path_absoluto = fs::canonicalize(&caminho_salvar).unwrap_or_else(|_| PathBuf::from(&caminho_salvar));
+                println!("💾 Relatório exportado para Excel com sucesso em:\n   {}", path_absoluto.display());
+            }
         }
     }
     if let Some(mut proc) = processo_ia_gerenciado { proc.kill().ok(); }
