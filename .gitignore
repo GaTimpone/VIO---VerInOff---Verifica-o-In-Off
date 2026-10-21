@@ -1,0 +1,21 @@
+# Rust - Arquivos de compilação e binários
+/target/
+**/*.rs.bk
+
+# Arquivos de depuração do MSVC (Windows)
+*.pdb
+
+# Testes de mutação e erros internos do compilador
+**/mutants.out*/
+rustc-ice-*.txt
+
+# Configurações e arquivos temporários do Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Arquivos do Sistema Operacional
+.DS_Store
+Thumbs.db

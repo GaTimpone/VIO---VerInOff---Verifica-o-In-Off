@@ -364,8 +364,21 @@ async fn main() {
 
     let pasta_atual = std::env::current_dir().unwrap();
     let mut pasta_regras = pasta_atual.join("config_rules");
-    if !pasta_regras.exists() { pasta_regras = caminho_executavel.join("config_rules"); }
 
+    if !pasta_regras.exists() {
+        // 1. Tenta ao lado do executável (Windows ou binário local no Linux)
+        let pasta_ao_lado = caminho_executavel.join("config_rules");
+        
+        // 2. Tenta diretório global padrão de configuração Linux (/etc/vio/config_rules)
+        let pasta_global_linux = std::path::PathBuf::from("/etc/vio/config_rules");
+
+        if pasta_ao_lado.exists() {
+            pasta_regras = pasta_ao_lado;
+        } else if pasta_global_linux.exists() {
+            pasta_regras = pasta_global_linux;
+        }
+    }
+    
     let jsons_para_rodar = match &args.arquivo_config {
         Some(nome) => vec![nome.clone()],
         None => {
