@@ -236,36 +236,20 @@ Status Qualitativo: [Sim / Não / Parcialmente]
   "endpoint_slm": "http://localhost:11434/api/generate",
   "modelo_slm": "phi3",
   "pastas_ignoradas_extracao": [
+    "3.Implementacao",
+    "4.Teste",
+    "5.Implantacao",
     ".git",
-    "target",
-    "3.Implementacao"
+    ".vscode"
   ],
   "regras_conformidade": [
     {
-      "id_regra": "O escopo e objetivos estão formalizados no documento de Visão?",
+      "id_regra": "O objetivo, os problemas e as necessidades do cliente estão claras?",
       "tipo_arquivo": "word",
       "pasta_esperada": "1.Requisitos",
       "nome_arquivo_base": "{SIGLA} - Visão",
       "obrigatorio": true,
-      "prompt_ia": "Aja como auditor de software. Avalie o texto do documento Visão. Responda se os objetivos do produto estão bem delimitados. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases sobre a clareza do escopo]\nDesvio: [Descreva o desvio ou 'Nenhum']\nSugestão: [Sugestão ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
-    },
-    {
-      "id_regra": "A planilha de planejamento define a alocação de membros?",
-      "tipo_arquivo": "excel",
-      "pasta_esperada": "6.Gerenciamento de Projeto",
-      "nome_arquivo_base": "{SIGLA} - Planejamento",
-      "aba_planilha": "Equipe",
-      "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise os dados da aba de equipe e valide se os responsáveis foram atribuídos. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases avaliando a equipe]\nDesvio: [Descreva a inconformidade ou 'Nenhum']\nSugestão: [Recomendação ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
-    },
-    {
-      "id_regra": "O arquivo de protótipo de alta fidelidade está na pasta correta?",
-      "tipo_arquivo": "word",
-      "pasta_esperada": "1.Requisitos/Prototipos",
-      "nome_arquivo_base": "{SIGLA} - Wireframes",
-      "obrigatorio": false,
-      "apenas_existencia": true,
-      "prompt_ia": ""
+      "prompt_ia": "Aja como auditor. Analise o documento Visão. Ignore colchetes '[...]'. Responda à pergunta: 'O objetivo, os problemas e as necessidades do cliente estão claras?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
     }
   ]
 }
