@@ -1,14 +1,21 @@
 {
   "endpoint_slm": "http://localhost:11434/api/generate",
   "modelo_slm": "phi3",
+  "pastas_ignoradas_extracao": [
+    "3.Implementacao",
+    "4.Teste",
+    "5.Implantacao",
+    ".git",
+    ".vscode"
+  ],
   "regras_conformidade": [
     {
-      "id_regra": "TESTE-EXCEL-ESPELHO",
-      "tipo_arquivo": "excel",
-      "nome_arquivo_esperado": "matriz_riscos.xlsx",
+      "id_regra": "O objetivo, os problemas e as necessidades do cliente estão claras?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "1.Requisitos",
+      "nome_arquivo_base": "{SIGLA} - Visão",
       "obrigatorio": true,
-      "aba_planilha": "Riscos_Projeto",
-      "prompt_ia": "Retorne estritamente o texto bruto abaixo, nada a+, ESTRITAMENTE O TEXTO, agindo como um espelho perfeito:"
+      "prompt_ia": "Aja como auditor. Analise o documento Visão. Ignore colchetes '[...]'. Responda à pergunta: 'O objetivo, os problemas e as necessidades do cliente estão claras?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
     }
   ]
 }

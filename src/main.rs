@@ -1,5 +1,5 @@
 use clap::Parser;
-use std::fs;
+use std::fs::{self};
 use std::path::Path;
 use std::process::{Command, Child};
 use std::net::TcpStream;
@@ -73,6 +73,15 @@ struct ArgumentosCli {
 
     #[arg(long, help = "Ativa ou desativa permanentemente o modo silencioso")]
     toggle_quiet: bool,
+
+    #[arg(long, help = "Exporta o relatório gerado para um arquivo CSV")]
+    exportar_csv: bool,
+
+    #[arg(long, help = "Exporta o relatório gerado para um arquivo HTML elegante com gráficos")]
+    html: bool,
+
+    #[arg(long = "pasta-saida", help = "Pasta onde o CSV/HTML será salvo (opcional)")]
+    pasta_saida: Option<String>,
 }
 
 #[derive(serde::Serialize)]
@@ -90,6 +99,17 @@ struct PayloadOllama {
     prompt: String,
     stream: bool,
     options: OllamaOptions,
+}
+
+fn registrar_erro(mensagem: &str) {
+    let mut pasta_logs = std::env::current_exe().unwrap();
+    pasta_logs.pop();
+    pasta_logs = pasta_logs.join("logs");
+    std::fs::create_dir_all(&pasta_logs).ok(); // Cria a pasta "logs" se não existir
+
+    if let Ok(mut file) = std::fs::OpenOptions::new().create(true).append(true).open(pasta_logs.join("auditoria_erros.log")) {
+        let _ = writeln!(file, "[ERRO] {}", mensagem);
+    }
 }
 
 fn gerenciar_motor_ia(endpoint: &str) -> Option<Child> {
@@ -120,12 +140,61 @@ fn buscar_arquivos_estranhos(dir: &Path, arquivos_conhecidos: &HashSet<String>, 
     }
 }
 
-fn truncar(texto: &str, limite: usize) -> String {
-    if texto.chars().count() > limite {
-        let mut truncado: String = texto.chars().take(limite - 3).collect();
-        truncado.push_str("...");
-        truncado
-    } else { texto.to_string() }
+fn gerar_codigo_html(projeto: &str, indicador: f32, qtd_sim: f32, qtd_nao: f32, qtd_parcial: f32, qtd_na: f32, tabela_html: &str) -> String {
+    format!(r#"<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"><title>Relatório VIO - {}</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }}
+        .container {{ max-width: 1200px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+        h1 {{ color: #2c3e50; text-align: center; border-bottom: 2px solid #3498db; padding-bottom: 10px; }}
+        .dashboard {{ display: flex; justify-content: space-around; align-items: center; margin-bottom: 40px; flex-wrap: wrap; }}
+        .chart-container {{ width: 300px; height: 300px; }}
+        .metric {{ text-align: center; }}
+        .metric h2 {{ font-size: 52px; color: #27ae60; margin: 0; }}
+        .metric p {{ font-size: 18px; color: #7f8c8d; font-weight: bold; }}
+        table {{ width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }}
+        th, td {{ padding: 12px 15px; border-bottom: 1px solid #ddd; text-align: left; }}
+        th {{ background-color: #34495e; color: #fff; text-transform: uppercase; }}
+        tr:hover {{ background-color: #f1f1f1; }}
+        .sim {{ border-left: 5px solid #2ecc71; }}
+        .nao {{ border-left: 5px solid #e74c3c; }}
+        .parcial {{ border-left: 5px solid #f1c40f; }}
+        .na {{ border-left: 5px solid #bdc3c7; color: #95a5a6; }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Auditoria de Processo: {}</h1>
+        <div class="dashboard">
+            <div class="metric">
+                <h2>{:.1}%</h2>
+                <p>Aderência do Processo</p>
+            </div>
+            <div class="chart-container">
+                <canvas id="graficoAderencia"></canvas>
+            </div>
+        </div>
+        <table>
+            <thead><tr><th>Fase</th><th>Pergunta</th><th>Status</th><th>Desvio</th><th>Sugestão</th></tr></thead>
+            <tbody>{}</tbody>
+        </table>
+    </div>
+    <script>
+        var ctx = document.getElementById('graficoAderencia').getContext('2d');
+        new Chart(ctx, {{
+            type: 'doughnut',
+            data: {{
+                labels: ['Sim', 'Não', 'Parcialmente', 'Não Se Aplica'],
+                datasets: [{{ data: [{}, {}, {}, {}], backgroundColor: ['#2ecc71', '#e74c3c', '#f1c40f', '#bdc3c7'] }}]
+            }},
+            options: {{ responsive: true, maintainAspectRatio: false }}
+        }});
+    </script>
+</body>
+</html>"#, projeto, projeto, indicador, tabela_html, qtd_sim, qtd_nao, qtd_parcial, qtd_na)
 }
 
 #[tokio::main]
@@ -134,9 +203,18 @@ async fn main() {
     let mut caminho_executavel = std::env::current_exe().unwrap();
     caminho_executavel.pop();
 
-    let caminho_settings = caminho_executavel.join("settings.json");
+    // Diretório seguro para escrita de dados no Windows (%LOCALAPPDATA%\VIO)
+    let pasta_dados = dirs::data_local_dir()
+        .map(|p| p.join("VIO"))
+        .unwrap_or_else(|| caminho_executavel.clone());
+
+    if !pasta_dados.exists() {
+        let _ = fs::create_dir_all(&pasta_dados);
+    }
+
+    let caminho_settings = pasta_dados.join("settings.json");
     let mut settings = if caminho_settings.exists() {
-        serde_json::from_str(&fs::read_to_string(&caminho_settings).unwrap()).unwrap_or(SettingsLocal { quiet_mode: false })
+        serde_json::from_str(&fs::read_to_string(&caminho_settings).unwrap_or_default()).unwrap_or(SettingsLocal { quiet_mode: false })
     } else {
         SettingsLocal { quiet_mode: false }
     };
@@ -150,7 +228,7 @@ async fn main() {
 
     let is_quiet = settings.quiet_mode;
 
-    let caminho_banco = caminho_executavel.join("auditorias.db");
+    let caminho_banco = pasta_dados.join("auditorias.db");
     let conexao_db = Connection::open(&caminho_banco).unwrap();
     conexao_db.execute("CREATE TABLE IF NOT EXISTS identidade_projeto (projeto TEXT PRIMARY KEY, resumo_identidade TEXT NOT NULL)", []).ok();
     conexao_db.execute("CREATE TABLE IF NOT EXISTS historico_auditoria (id INTEGER PRIMARY KEY AUTOINCREMENT, projeto TEXT NOT NULL, fase_json TEXT NOT NULL, id_regra TEXT NOT NULL, arquivo TEXT NOT NULL, status TEXT NOT NULL, desvio TEXT DEFAULT '', sugestao TEXT DEFAULT '', data_auditoria DATETIME DEFAULT CURRENT_TIMESTAMP)", []).ok();
@@ -176,19 +254,48 @@ async fn main() {
         return;
     }
 
+    if args.update {
+        println!("🔄 Atualizando motor da IA (Phi-3)...");
+        Command::new("ollama").arg("pull").arg("phi3").status().ok();
+        
+        println!("\n🔄 Buscando atualizações do VIO no GitHub...");
+        
+        // ATENÇÃO: Substitua "SeuUsuario" e "NomeDoRepositorio" pelos reais no GitHub
+        let status_update = self_update::backends::github::Update::configure()
+            .repo_owner("GaTimpone") 
+            .repo_name("VIO---VerInOff---Verifica-o-In-Off")
+            .bin_name("vio") // O nome do seu .exe no release do GitHub
+            .show_download_progress(true)
+            .current_version(env!("CARGO_PKG_VERSION")) // Puxa a versão do seu Cargo.toml
+            .build();
+
+        match status_update {
+            Ok(updater) => {
+                match updater.update() {
+                    Ok(status) => {
+                        if status.updated() {
+                            println!("🎉 VIO atualizado com sucesso para a versão: {}", status.version());
+                        } else {
+                            println!("✅ Você já possui a versão mais recente ({}).", status.version());
+                        }
+                    }
+                    Err(e) => registrar_erro(&format!("Falha ao aplicar atualização: {}", e)),
+                }
+            }
+            Err(e) => registrar_erro(&format!("Falha ao contatar o GitHub: {}", e)),
+        }
+        return;
+    }
+
     if args.gerar_relatorio {
         let mut sql = "SELECT projeto, fase_json, id_regra, status, desvio, sugestao FROM historico_auditoria WHERE 1=1".to_string();
         let mut params: Vec<String> = Vec::new();
-
         if let Some(ref p) = args.projeto { sql.push_str(" AND projeto = ?"); params.push(p.clone()); }
         if let Some(ref f) = args.fase { sql.push_str(" AND fase_json = ?"); params.push(f.clone()); }
 
         let mut stmt = conexao_db.prepare(&sql).unwrap();
         let auditorias = stmt.query_map(rusqlite::params_from_iter(params), |row| {
-            Ok((
-                row.get::<_, String>(0)?, row.get::<_, String>(1)?, row.get::<_, String>(2)?,
-                row.get::<_, String>(3)?, row.get::<_, String>(4)?, row.get::<_, String>(5)?
-            ))
+            Ok((row.get::<_, String>(0)?, row.get::<_, String>(1)?, row.get::<_, String>(2)?, row.get::<_, String>(3)?, row.get::<_, String>(4)?, row.get::<_, String>(5)?))
         }).unwrap();
 
         let mut registros = Vec::new();
@@ -199,30 +306,59 @@ async fn main() {
             return;
         }
 
-        let mut qtd_valido = 0.0;
-        let mut qtd_sim = 0.0;
+        let mut qtd_valido = 0.0; let mut qtd_sim = 0.0; let mut qtd_nao = 0.0; let mut qtd_parcial = 0.0; let mut qtd_na = 0.0;
+        let mut html_linhas = String::new();
 
         for reg in &registros {
             let st = reg.3.to_lowercase();
-            if st.contains("sim") { qtd_sim += 1.0; qtd_valido += 1.0; }
-            else if st.contains("não") || st.contains("nao") || st.contains("parcialmente") {
-                if !st.contains("aplica") { qtd_valido += 1.0; }
+            let mut classe = "na";
+            if st.contains("sim") { qtd_sim += 1.0; qtd_valido += 1.0; classe = "sim"; }
+            else if st.contains("parcialmente") { qtd_parcial += 1.0; qtd_valido += 1.0; classe = "parcial"; }
+            else if st.contains("não") || st.contains("nao") {
+                if st.contains("aplica") { qtd_na += 1.0; } else { qtd_nao += 1.0; qtd_valido += 1.0; classe = "nao"; }
             }
+            html_linhas.push_str(&format!("<tr class='{}'><td>{}</td><td>{}</td><td><strong>{}</strong></td><td>{}</td><td>{}</td></tr>\n", classe, reg.1, reg.2, reg.3, reg.4.trim(), reg.5.trim()));
         }
 
         let indicador = if qtd_valido > 0.0 { (qtd_sim / qtd_valido) * 100.0 } else { 0.0 };
 
-        println!("\n=======================================================================================================================================");
-        println!("                                          RELATÓRIO DE CONFORMIDADE (GERADO VIA BANCO)");
-        println!("=======================================================================================================================================");
+        println!("\n====================================================================================================");
+        println!("                                  RELATÓRIO DE CONFORMIDADE (VIA BANCO)");
+        println!("====================================================================================================");
         println!("Aderência : {:.1}% (Indicador do Processo SpinOff)", indicador);
-        println!("---------------------------------------------------------------------------------------------------------------------------------------");
-        println!("{:<50} | {:<13} | {:<30} | {}", "PERGUNTA", "STATUS", "DESVIO", "SUGESTÃO");
-        println!("---------------------------------------------------------------------------------------------------------------------------------------");
+        println!("----------------------------------------------------------------------------------------------------");
         for reg in &registros {
-            println!("{:<50} | {:<13} | {:<30} | {}", truncar(&reg.2, 50), reg.3, truncar(&reg.4, 30), truncar(&reg.5, 35));
+            println!("[{:<12}] {}", reg.3, reg.2);
+            let desvio = reg.4.trim(); let sugestao = reg.5.trim();
+            if !desvio.is_empty() && desvio.to_lowercase() != "nenhum" && desvio.to_lowercase() != "nenhuma." { println!("  ↳ Desvio  : {}", desvio); }
+            if !sugestao.is_empty() && sugestao.to_lowercase() != "nenhuma" && sugestao.to_lowercase() != "nenhuma." { println!("  ↳ Sugestão: {}", sugestao); }
+            println!("-");
         }
-        println!("=======================================================================================================================================\n");
+        println!("====================================================================================================\n");
+
+        if args.exportar_csv || args.html {
+            let pasta_destino = args.pasta_saida.clone().map(std::path::PathBuf::from).unwrap_or_else(|| std::env::current_dir().unwrap().join("relatorios"));
+            if !pasta_destino.exists() { fs::create_dir_all(&pasta_destino).unwrap(); }
+            
+            let proj_nome = args.projeto.unwrap_or_else(|| "Geral".to_string());
+
+            if args.exportar_csv {
+                let mut csv_content = format!("\u{FEFF}Aderência do Processo: {:.1}%\n\nProjeto;Fase;Status;Pergunta;Desvio;Sugestão\n", indicador);
+                for reg in &registros {
+                    csv_content.push_str(&format!("{};{};{};{};{};{}\n", reg.0, reg.1, reg.3, reg.2.replace(";", ","), reg.4.replace(";", ",").replace("\n", " "), reg.5.replace(";", ",").replace("\n", " ")));
+                }
+                let caminho_csv = pasta_destino.join(format!("Relatorio_{}.csv", proj_nome));
+                fs::write(&caminho_csv, csv_content).unwrap();
+                println!("💾 CSV exportado com sucesso: {}", fs::canonicalize(&caminho_csv).unwrap_or(caminho_csv).display());
+            }
+
+            if args.html {
+                let html_content = gerar_codigo_html(&proj_nome, indicador, qtd_sim, qtd_nao, qtd_parcial, qtd_na, &html_linhas);
+                let caminho_html = pasta_destino.join(format!("Dashboard_{}.html", proj_nome));
+                fs::write(&caminho_html, html_content).unwrap();
+                println!("📊 Dashboard HTML exportado com sucesso: {}", fs::canonicalize(&caminho_html).unwrap_or(caminho_html).display());
+            }
+        }
         return;
     }
 
@@ -252,7 +388,16 @@ async fn main() {
         let caminho_json = pasta_regras.join(&arquivo_json);
         if !caminho_json.exists() { continue; }
         let conteudo_json = fs::read_to_string(&caminho_json).unwrap();
-        let configuracao: ConfiguracaoGlobal = serde_json::from_str(&conteudo_json).unwrap();
+        
+        // Proteção contra JSONs quebrados, antigos ou com campos faltando
+        let configuracao: ConfiguracaoGlobal = match serde_json::from_str(&conteudo_json) {
+            Ok(config) => config,
+            Err(erro) => {
+                registrar_erro(&format!("Erro ao ler JSON '{}': {}", arquivo_json, erro));
+                if !is_quiet { println!("⚠️ Pulando o arquivo '{}': Erro na estrutura do JSON.", arquivo_json); }
+                continue;
+            }
+        };
         
         if processo_ia_gerenciado.is_none() { processo_ia_gerenciado = gerenciar_motor_ia(&configuracao.endpoint_slm); }
 
@@ -349,7 +494,10 @@ async fn main() {
                                 memoria_do_projeto.push_str(&format!("- Regra {}: {}\n", regra.id_regra, status_extraido));
                                 break; 
                             }
-                        } else { break; }
+                        } else { 
+                            registrar_erro(&format!("Falha na comunicação HTTP com a IA. Regra: {}", regra.id_regra));
+                            break; 
+                        }
                     }
                     if !status_extraido.is_empty() {
                         buffer_banco_dados.push((sigla_projeto.clone(), arquivo_json.clone(), regra.id_regra.clone(), nome_base_resolvido.clone(), status_extraido, desvio_extraido, sugestao_extraida));
@@ -373,33 +521,62 @@ async fn main() {
         }
 
         if !buffer_banco_dados.is_empty() {
-            let mut qtd_valido = 0.0;
-            let mut qtd_sim = 0.0;
+            let mut qtd_valido = 0.0; let mut qtd_sim = 0.0; let mut qtd_nao = 0.0; let mut qtd_parcial = 0.0; let mut qtd_na = 0.0;
+            let mut html_linhas = String::new();
 
             for reg in &buffer_banco_dados {
                 let st = reg.4.to_lowercase();
-                if st.contains("sim") { qtd_sim += 1.0; qtd_valido += 1.0; }
-                else if st.contains("não") || st.contains("nao") || st.contains("parcialmente") {
-                    if !st.contains("aplica") { qtd_valido += 1.0; }
+                let mut classe = "na";
+                if st.contains("sim") { qtd_sim += 1.0; qtd_valido += 1.0; classe = "sim"; }
+                else if st.contains("parcialmente") { qtd_parcial += 1.0; qtd_valido += 1.0; classe = "parcial"; }
+                else if st.contains("não") || st.contains("nao") {
+                    if st.contains("aplica") { qtd_na += 1.0; } else { qtd_nao += 1.0; qtd_valido += 1.0; classe = "nao"; }
                 }
                 conexao_db.execute("INSERT INTO historico_auditoria (projeto, fase_json, id_regra, arquivo, status, desvio, sugestao) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
                     (&reg.0, &reg.1, &reg.2, &reg.3, &reg.4, &reg.5, &reg.6)).ok();
+                
+                html_linhas.push_str(&format!("<tr class='{}'><td>{}</td><td>{}</td><td><strong>{}</strong></td><td>{}</td><td>{}</td></tr>\n", classe, reg.1, reg.2, reg.4, reg.5.trim(), reg.6.trim()));
             }
 
             let indicador = if qtd_valido > 0.0 { (qtd_sim / qtd_valido) * 100.0 } else { 0.0 };
 
-            println!("\n=======================================================================================================================================");
+            println!("\n====================================================================================================");
             println!("                                          RELATÓRIO DE CONFORMIDADE ({})", arquivo_json);
-            println!("=======================================================================================================================================");
+            println!("====================================================================================================");
             println!("Projeto   : {}", sigla_projeto);
             println!("Aderência : {:.1}% (Indicador do Processo SpinOff)", indicador);
-            println!("---------------------------------------------------------------------------------------------------------------------------------------");
-            println!("{:<50} | {:<13} | {:<30} | {}", "PERGUNTA", "STATUS", "DESVIO", "SUGESTÃO");
-            println!("---------------------------------------------------------------------------------------------------------------------------------------");
+            println!("----------------------------------------------------------------------------------------------------");
+            
             for reg in &buffer_banco_dados {
-                println!("{:<50} | {:<13} | {:<30} | {}", truncar(&reg.2, 50), reg.4, truncar(&reg.5, 30), truncar(&reg.6, 35));
+                println!("[{:<12}] {}", reg.4, reg.2);
+                let desvio = reg.5.trim(); let sugestao = reg.6.trim();
+                if !desvio.is_empty() && desvio.to_lowercase() != "nenhum" && desvio.to_lowercase() != "nenhuma." { println!("  ↳ Desvio  : {}", desvio); }
+                if !sugestao.is_empty() && sugestao.to_lowercase() != "nenhuma" && sugestao.to_lowercase() != "nenhuma." { println!("  ↳ Sugestão: {}", sugestao); }
+                println!("-");
             }
-            println!("=======================================================================================================================================\n");
+            println!("====================================================================================================\n");
+
+            if args.exportar_csv || args.html {
+                let pasta_destino = args.pasta_saida.clone().map(std::path::PathBuf::from).unwrap_or_else(|| std::env::current_dir().unwrap().join("relatorios"));
+                if !pasta_destino.exists() { fs::create_dir_all(&pasta_destino).unwrap(); }
+
+                if args.exportar_csv {
+                    let mut csv_content = format!("\u{FEFF}Aderência do Processo: {:.1}%\n\nProjeto;Fase;Status;Pergunta;Desvio;Sugestão\n", indicador);
+                    for reg in &buffer_banco_dados {
+                        csv_content.push_str(&format!("{};{};{};{};{};{}\n", reg.0, reg.1, reg.4, reg.2.replace(";", ","), reg.5.replace(";", ",").replace("\n", " "), reg.6.replace(";", ",").replace("\n", " ")));
+                    }
+                    let caminho_csv = pasta_destino.join(format!("Relatorio_{}_{}.csv", sigla_projeto, arquivo_json.replace(".json", "")));
+                    fs::write(&caminho_csv, csv_content).unwrap();
+                    println!("💾 CSV exportado com sucesso: {}", fs::canonicalize(&caminho_csv).unwrap_or(caminho_csv).display());
+                }
+
+                if args.html {
+                    let html_content = gerar_codigo_html(&sigla_projeto, indicador, qtd_sim, qtd_nao, qtd_parcial, qtd_na, &html_linhas);
+                    let caminho_html = pasta_destino.join(format!("Dashboard_{}_{}.html", sigla_projeto, arquivo_json.replace(".json", "")));
+                    fs::write(&caminho_html, html_content).unwrap();
+                    println!("📊 Dashboard HTML exportado com sucesso: {}", fs::canonicalize(&caminho_html).unwrap_or(caminho_html).display());
+                }
+            }
         }
     }
     if let Some(mut proc) = processo_ia_gerenciado { proc.kill().ok(); }
