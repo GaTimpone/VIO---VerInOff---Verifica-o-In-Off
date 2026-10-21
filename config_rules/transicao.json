@@ -1,0 +1,174 @@
+{
+  "endpoint_slm": "http://localhost:11434/api/generate",
+  "modelo_slm": "phi3",
+  "pastas_ignoradas_extracao": ["3.Implementacao", ".git", ".vscode"],
+  "regras_conformidade": [
+    {
+      "id_regra": "O visão foi atualizado devido a mudança de escopo?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "1.Requisitos",
+      "nome_arquivo_base": "{SIGLA} - Visão",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise o documento Visão. Ignore colchetes '[...]'. Responda à pergunta: 'O visão foi atualizado devido a mudança de escopo?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "O modelo de casos de uso, escopo do sistema, foi atualizado conforme as mudanças?",
+      "tipo_arquivo": "uml",
+      "pasta_esperada": "2.Analise e Design",
+      "nome_arquivo_base": "{SIGLA} - Modelos Analise e Design",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise o diagrama UML. Responda à pergunta: 'O modelo de casos de uso, escopo do sistema, foi atualizado conforme as mudanças?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "As especificações dos casos de uso/histórias de usuário foram atualizadas conforme a implementação?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "1.Requisitos/Casos de Uso",
+      "nome_arquivo_base": "{SIGLA} - Historia de Usuario",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise a História de Usuário. Ignore colchetes '[...]'. Responda à pergunta: 'As especificações dos casos de uso/histórias de usuário foram atualizadas conforme a implementação?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "Os diagramas de de casos de uso e classes foram atualizados conforme a implementação? (diagrama de classes ou DER)",
+      "tipo_arquivo": "uml",
+      "pasta_esperada": "2.Analise e Design",
+      "nome_arquivo_base": "{SIGLA} - Modelos Analise e Design",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise o diagrama UML. Responda à pergunta: 'Os diagramas de de casos de uso e classes foram atualizados conforme a implementação? (diagrama de classes ou DER)'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "As novas especificações, modelos e protótipos foram aprovados pelo cliente?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "6.Gerenciamento de Projeto/Atas",
+      "nome_arquivo_base": "{SIGLA} - Ata de Reunião",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise a Ata de Reunião. Ignore colchetes '[...]'. Responda à pergunta: 'As novas especificações, modelos e protótipos foram aprovados pelo cliente?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "Foi atualizado?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "1.Requisitos",
+      "nome_arquivo_base": "{SIGLA} - Glossario",
+      "obrigatorio": false,
+      "prompt_ia": "Aja como auditor. Analise o Glossário. Ignore colchetes '[...]'. Responda à pergunta: 'O glossário foi atualizado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "O modelo de arquitetura foi atualizado?",
+      "tipo_arquivo": "uml",
+      "pasta_esperada": "2.Analise e Design",
+      "nome_arquivo_base": "{SIGLA} - Modelos Analise e Design",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise o diagrama UML. Responda à pergunta: 'O modelo de arquitetura foi atualizado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "Os diagramas de classes foram atualizados?",
+      "tipo_arquivo": "uml",
+      "pasta_esperada": "2.Analise e Design",
+      "nome_arquivo_base": "{SIGLA} - Modelos Analise e Design",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise o diagrama UML. Responda à pergunta: 'Os diagramas de classes foram atualizados?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "Os roteiros de testes foram atualizados e executados?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "4.Teste",
+      "nome_arquivo_base": "{SIGLA} - Roteiro de Testes",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise o Roteiro de Testes. Ignore colchetes '[...]'. Responda à pergunta: 'Os roteiros de testes foram atualizados e executados?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "Os testes realizados foram registrados no roteiro de testes?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "4.Teste",
+      "nome_arquivo_base": "{SIGLA} - Roteiro de Testes",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise o Roteiro de Testes. Ignore colchetes '[...]'. Responda à pergunta: 'Os testes realizados foram registrados no roteiro de testes?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "O artefato foi criado com o template atual e armazenado na pasta correta da estrutura do projeto?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "5.Implantacao",
+      "nome_arquivo_base": "{SIGLA} - Guia de Implantacao",
+      "obrigatorio": true,
+      "apenas_existencia": true,
+      "prompt_ia": ""
+    },
+    {
+      "id_regra": "O guia de implantação foi criado para implantar o produto (subproduto) com software, hardware, etc. necessários para a implantação em ambiente de produção?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "5.Implantacao",
+      "nome_arquivo_base": "{SIGLA} - Guia de Implantacao",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise o Guia de Implantação. Ignore colchetes '[...]'. Responda à pergunta: 'O guia de implantação foi criado para implantar o produto (subproduto) com software, hardware, etc. necessários para a implantação em ambiente de produção?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "O artefato foi criado com o template atual e armazenado na pasta correta da estrutura do projeto?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "5.Implantacao",
+      "nome_arquivo_base": "{SIGLA} - Manual do Usuario",
+      "obrigatorio": false,
+      "apenas_existencia": true,
+      "prompt_ia": ""
+    },
+    {
+      "id_regra": "Foi feito o planejamento do Sprint?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": true,
+      "aba_planilha": "Backlog_Sprint",
+      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Sprint. Responda à pergunta: 'Foi feito o planejamento do Sprint?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "O Backlog do Produto foi alterado, caso tenham sido incluidas ou removidas tarefas?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": true,
+      "aba_planilha": "Backlog_Produto",
+      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Produto. Responda à pergunta: 'O Backlog do Produto foi alterado, caso tenham sido incluidas ou removidas tarefas?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "O plano de entregas foi atualizado? Corresponde ao número de sprints?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": true,
+      "aba_planilha": "Entregas",
+      "prompt_ia": "Aja como auditor. Analise a aba Entregas. Responda à pergunta: 'O plano de entregas foi atualizado? Corresponde ao número de sprints?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "Foram realizados os testes de aceitação por parte do usuário final?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "6.Gerenciamento de Projeto/Atas",
+      "nome_arquivo_base": "{SIGLA} - Ata de Reunião",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise a Ata de Reunião. Ignore colchetes '[...]'. Responda à pergunta: 'Foram realizados os testes de aceitação por parte do usuário final?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "Foram feitas as reuniões de Revisão do Produto e Processo?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "6.Gerenciamento de Projeto/Atas",
+      "nome_arquivo_base": "{SIGLA} - Ata de Reunião",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise a Ata de Reunião. Ignore colchetes '[...]'. Responda à pergunta: 'Foram feitas as reuniões de Revisão do Produto e Processo?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "As mudanças de escopo foram registradas no Backlog do produto?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": true,
+      "aba_planilha": "Backlog_Produto",
+      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Produto. Responda à pergunta: 'As mudanças de escopo foram registradas no Backlog do produto?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "Há rastreabilidade (histórico do que foi alterado) das mudanças?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": true,
+      "aba_planilha": "Backlog_Produto",
+      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Produto. Responda à pergunta: 'Há rastreabilidade (histórico do que foi alterado) das mudanças?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    }
+  ]
+}
