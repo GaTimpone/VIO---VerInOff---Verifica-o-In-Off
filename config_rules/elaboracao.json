@@ -1,0 +1,80 @@
+{
+  "endpoint_slm": "http://localhost:11434/api/generate",
+  "modelo_slm": "phi3",
+  "pastas_ignoradas_extracao": [
+    "1.Requisitos",
+    "5.Implantacao",
+    ".git",
+    ".vscode"
+  ],
+  "regras_conformidade": [
+    {
+      "id_regra": "O Documento de Arquitetura descreve claramente as decisões arquiteturais, padrões e tecnologias escolhidas?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "2.Analise e Design",
+      "nome_arquivo_base": "{SIGLA} - Documento de Arquitetura",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise o Documento de Arquitetura. Ignore colchetes '[...]'. Responda: 'O Documento de Arquitetura descreve claramente as decisões arquiteturais, padrões e tecnologias escolhidas?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "O modelo de dados (MER/Diagrama de Classes) suporta os requisitos definidos na Iniciação?",
+      "tipo_arquivo": "uml",
+      "pasta_esperada": "2.Analise e Design",
+      "nome_arquivo_base": "{SIGLA} - Modelos Analise e Design",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise o diagrama UML. Responda: 'O modelo de dados ou diagrama de classes está consistente e suporta as necessidades do sistema?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "Os Casos de Uso foram detalhados com fluxos principais, alternativos e de exceção?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "1.Requisitos/Casos de Uso",
+      "nome_arquivo_base": "{SIGLA} - Especificacao de Casos de Uso",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise a Especificação de Casos de Uso. Responda: 'Os casos de uso foram detalhados com fluxos principais, alternativos e de exceção?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "As atas das reuniões de acompanhamento da Elaboração foram registradas e aprovadas?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "6.Gerenciamento de Projeto/Atas",
+      "nome_arquivo_base": "{SIGLA} - Ata de Reunião",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise a Ata de Reunião. Responda: 'As atas da fase de Elaboração indicam aprovação das decisões de arquitetura e design?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "O Backlog do Produto foi refinado e reestimado após a definição da arquitetura?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": true,
+      "aba_planilha": "Backlog_Produto",
+      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Produto. Responda: 'O Backlog do Produto foi refinado, detalhado ou reestimado durante a fase de elaboração?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "O planejamento das Sprints/Entregas da Elaboração foi acompanhado e atualizado?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": true,
+      "aba_planilha": "Entregas",
+      "prompt_ia": "Aja como auditor. Analise a aba Entregas. Responda: 'O planejamento das Sprints correspondentes à fase de elaboração está atualizado com o status de conclusão?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "Os riscos arquiteturais e tecnológicos foram adicionados e mitigados no plano de riscos?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": true,
+      "aba_planilha": "Riscos",
+      "prompt_ia": "Aja como auditor. Analise a aba Riscos. Responda: 'Foram identificados e mitigados novos riscos, especialmente arquiteturais ou tecnológicos, na fase de Elaboração?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "O esforço real realizado na fase de Elaboração foi registrado e comparado com o planejado?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": false,
+      "aba_planilha": "Acompanhamento",
+      "prompt_ia": "Aja como auditor. Analise a aba que trata do controle de horas ou acompanhamento. Responda: 'O esforço real (horas realizadas) foi atualizado e comparado com o planejado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    }
+  ]
+}

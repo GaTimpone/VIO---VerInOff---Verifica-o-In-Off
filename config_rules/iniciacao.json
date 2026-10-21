@@ -88,7 +88,7 @@
       "pasta_esperada": "6.Gerenciamento de Projeto/Atas",
       "nome_arquivo_base": "{SIGLA} - Ata de Reunião",
       "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise a Ata de Reunião. Responda: 'As atas das reuniões de levantamento de requisitos foram aprovadas?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor. Analise a Ata de Reunião. Responda: 'As atas das reuniões de levantamento de requisitos indicam aprovação dos participantes?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
     },
     {
       "id_regra": "A equipe foi definida com seus respectivos e-mails?",
@@ -109,6 +109,24 @@
       "prompt_ia": "Aja como auditor. Analise a aba Backlog_Produto. Responda: 'O backlog do produto foi criado com todos os Casos de Uso listados?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
     },
     {
+      "id_regra": "Foi feita a estimativa do Backlog do Produto?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": true,
+      "aba_planilha": "Backlog_Produto",
+      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Produto. Responda: 'Foi feita a estimativa de esforço ou tamanho para os itens do Backlog do Produto?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "Foi feita a priorização do Backlog do Produto?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": true,
+      "aba_planilha": "Backlog_Produto",
+      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Produto. Responda: 'Os itens do Backlog do Produto foram priorizados?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
       "id_regra": "O plano de entregas foi definido, documentado e corresponde aos sprints?",
       "tipo_arquivo": "excel",
       "pasta_esperada": "6.Gerenciamento de Projeto",
@@ -116,6 +134,14 @@
       "obrigatorio": true,
       "aba_planilha": "Entregas",
       "prompt_ia": "Aja como auditor. Analise a aba Entregas. Responda: 'O plano de entregas foi definido, documentado e corresponde aos sprints?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+    },
+    {
+      "id_regra": "O planejamento foi apresentado e aprovado pelo cliente ou representante?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "6.Gerenciamento de Projeto/Atas",
+      "nome_arquivo_base": "{SIGLA} - Ata de Reunião",
+      "obrigatorio": true,
+      "prompt_ia": "Aja como auditor. Analise a Ata de Reunião de Planejamento. Responda: 'Há evidências de que o planejamento do projeto foi apresentado e aprovado pelo cliente ou representante?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
     },
     {
       "id_regra": "O plano de gerenciamento de riscos considerou as restrições registradas no Visão?",
