@@ -1,5 +1,8 @@
 # Rust - Arquivos de compilação e binários
 /target/
+/Testes/
+/relatorios/
+/TCC/
 **/*.rs.bk
 
 # Arquivos de depuração do MSVC (Windows)
