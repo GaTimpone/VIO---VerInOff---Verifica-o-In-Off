@@ -57,6 +57,14 @@ struct ArgumentosCli {
 
     #[arg(long = "pasta-saida", help = "Pasta onde o CSV/HTML será salvo (opcional)")]
     pasta_saida: Option<String>,
+
+    #[arg(
+        long = "ler-astah",
+        num_args = 0..=1,
+        default_missing_value = "",
+        help = "Extrai e exibe no terminal os diagramas, casos de uso, descrições e classes do arquivo Astah (.asta)"
+    )]
+    ler_astah: Option<String>,
 }
 
 #[derive(serde::Serialize)]
@@ -519,8 +527,8 @@ fn obter_contexto_cruzado_comparacao(
     let mut extra = String::new();
 
     // 1. Regras que comparam Backlog do Produto ou Roteiro de Testes com os Casos de Uso do Modelo Astah (.asta)
-    if (regra_norm.contains("backlog do produto foi criado com todos os casos de uso")
-        || regra_norm.contains("roteiro com casos de testes para cada caso de uso"))
+    if regra_norm.contains("backlog do produto foi criado com todos os casos de uso")
+        || regra_norm.contains("roteiro com casos de testes para cada caso de uso")
     {
         let pasta_uml = resolver_pasta_alvo(diretorio_projeto, "2.Analise e Design");
         let base_uml = format!("{} - Modelo de Análise e Design", sigla_projeto);
@@ -676,6 +684,65 @@ async fn main() {
             "⚙️ Modo Silencioso alterado para: {}",
             if settings.quiet_mode { "ATIVADO" } else { "DESATIVADO" }
         );
+        return;
+    }
+
+    if let Some(ref alvo_astah) = args.ler_astah {
+        let caminho_busca = if !alvo_astah.trim().is_empty() {
+            Path::new(alvo_astah.trim())
+        } else {
+            Path::new(&args.caminho_projeto)
+        };
+
+        let mut arquivos_asta: Vec<PathBuf> = Vec::new();
+        if caminho_busca.is_file() {
+            arquivos_asta.push(caminho_busca.to_path_buf());
+        } else if caminho_busca.is_dir() {
+            fn buscar_asta_recursivo(dir: &Path, achados: &mut Vec<PathBuf>) {
+                if let Ok(entries) = fs::read_dir(dir) {
+                    for entry in entries.flatten() {
+                        let p = entry.path();
+                        if p.is_dir() {
+                            buscar_asta_recursivo(&p, achados);
+                        } else if p.is_file() {
+                            let ext = p
+                                .extension()
+                                .and_then(|e| e.to_str())
+                                .unwrap_or("")
+                                .to_lowercase();
+                            if ext == "asta" || ext == "uml" || ext == "puml" || ext == "xmi" {
+                                achados.push(p);
+                            }
+                        }
+                    }
+                }
+            }
+            buscar_asta_recursivo(caminho_busca, &mut arquivos_asta);
+        }
+
+        if arquivos_asta.is_empty() {
+            println!(
+                "⚠️ Nenhum arquivo Astah (.asta) ou UML foi encontrado em '{}'.",
+                caminho_busca.display()
+            );
+            return;
+        }
+
+        for arq in arquivos_asta {
+            let tamanho_kb = fs::metadata(&arq).map(|m| m.len() / 1024).unwrap_or(0);
+            println!("====================================================================================================");
+            println!(
+                "🔍 INSPEÇÃO BINÁRIA NATIVA ASTAH (.ASTA) — VIO v{}",
+                env!("CARGO_PKG_VERSION")
+            );
+            println!("Arquivo : {} ({} KB)", arq.display(), tamanho_kb);
+            println!("====================================================================================================");
+            match extractor::extrair_astah(&arq) {
+                Ok(conteudo) => println!("{}", conteudo),
+                Err(erro) => println!("❌ Erro ao extrair modelo Astah: {}", erro),
+            }
+            println!("====================================================================================================");
+        }
         return;
     }
 
