@@ -1,6 +1,6 @@
 [package]
 name = "vio" # Mudamos o nome interno aqui! O executável se chamará verinoff.exe (ou vio.exe)
-version = "1.0.0"
+version = "1.0.1"
 edition = "2024"
 
 [dependencies]
@@ -14,5 +14,5 @@ clap = { version = "4.5", features = ["derive"] }
 futures-util = "0.3"
 rusqlite = { version = "0.31.0", features = ["bundled"] }
 regex = "1.10.4"
-self_update = "0.41"
+self_update = { version = "0.41", features = ["archive-zip", "compression-zip-deflate"] }
 dirs = "5.0"

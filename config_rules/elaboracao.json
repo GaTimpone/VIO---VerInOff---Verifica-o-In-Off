@@ -14,88 +14,88 @@
       "tipo_arquivo": "word",
       "pasta_esperada": "1.Requisitos",
       "nome_arquivo_base": "{SIGLA} - Visão",
-      "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise o documento Visão. Ignore colchetes '[...]'. Responda à pergunta: 'O visão foi atualizado devido a mudança de escopo?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "obrigatorio": false,
+      "prompt_ia": "Aja como auditor do processo SpinOff na fase de Elaboração. Analise o Documento Visão. No SpinOff, se o documento Visão estiver íntegro e completo (com objetivo, problemas, necessidades e restrições), responda 'Sim' (ou 'Não se aplica' caso não tenha havido mudança de escopo). Nunca reprove por ausência de mudança de escopo. Responda à pergunta: 'O visão foi atualizado devido a mudança de escopo?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente / Não se aplica]"
     },
     {
       "id_regra": "O modelo de casos de uso, escopo do sistema, foi atualizado conforme as mudanças?",
       "tipo_arquivo": "uml",
       "pasta_esperada": "2.Analise e Design",
-      "nome_arquivo_base": "{SIGLA} - Modelos Analise e Design",
-      "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise o diagrama UML. Responda à pergunta: 'O modelo de casos de uso, escopo do sistema, foi atualizado conforme as mudanças?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "nome_arquivo_base": "{SIGLA} - Modelo de Análise e Design",
+      "obrigatorio": false,
+      "prompt_ia": "Aja como auditor do processo SpinOff na fase de Elaboração. Analise o modelo UML extraído do Astah. Se o diagrama de casos de uso estiver presente e consistente com o escopo do sistema, responda 'Sim' (ou 'Não se aplica' caso não tenha havido mudança de escopo). Responda à pergunta: 'O modelo de casos de uso, escopo do sistema, foi atualizado conforme as mudanças?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente / Não se aplica]"
     },
     {
       "id_regra": "Os casos de uso e atores foram documentados (especificados) com descrição dos elementos UML.",
       "tipo_arquivo": "uml",
       "pasta_esperada": "2.Analise e Design",
-      "nome_arquivo_base": "{SIGLA} - Modelos Analise e Design",
+      "nome_arquivo_base": "{SIGLA} - Modelo de Análise e Design",
       "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise o diagrama UML. Responda à afirmação: 'Os casos de uso e atores foram documentados (especificados) com descrição dos elementos UML.'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise a seção '[CASOS DE USO E ELEMENTOS COM DESCRIÇÃO UML PREENCHIDA]' extraída do modelo UML Astah. Se houver descrições UML preenchidas para os casos de uso do sistema, aprove com 'Sim'. Responda à afirmação: 'Os casos de uso e atores foram documentados (especificados) com descrição dos elementos UML.'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
     },
     {
       "id_regra": "As especificações dos casos de uso/histórias de usuário foram atualizadas conforme a implementação?",
       "tipo_arquivo": "word",
       "pasta_esperada": "1.Requisitos/Casos de Uso",
-      "nome_arquivo_base": "{SIGLA} - Historia de Usuario",
+      "nome_arquivo_base": "{SIGLA} - Historia de Usuário",
       "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise a História de Usuário. Ignore colchetes '[...]'. Responda à pergunta: 'As especificações dos casos de uso/histórias de usuário foram atualizadas conforme a implementação?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise os documentos de História de Usuário extraídos da pasta '1.Requisitos/Casos de Uso'. Verifique se as histórias de usuário estão especificadas com descrição e tabela de Casos de Teste de Aceitação ('Cenário', 'Dado que', 'Quando', 'Então'). Se estiverem preenchidas e completas, aprove com 'Sim'. Responda à pergunta: 'As especificações dos casos de uso/histórias de usuário foram atualizadas conforme a implementação?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
     },
     {
       "id_regra": "Foi criado/atualizado o modelo de negócio das entidades? (diagrama de classes)",
       "tipo_arquivo": "uml",
       "pasta_esperada": "2.Analise e Design",
-      "nome_arquivo_base": "{SIGLA} - Modelos Analise e Design",
+      "nome_arquivo_base": "{SIGLA} - Modelo de Análise e Design",
       "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise o diagrama UML. Responda à pergunta: 'Foi criado/atualizado o modelo de negócio das entidades? (diagrama de classes)'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise os elementos extraídos do arquivo Astah (.asta). Verifique se há classes de domínio/negócio modeladas (ex: 'Modelo de Objetos', '2.Design', classes como Usuario, Tag, Post, Caderno, Anotacao, atributos e relacionamentos). Se houver classes de negócio modeladas no arquivo UML, aprove com 'Sim'. Responda à pergunta: 'Foi criado/atualizado o modelo de negócio das entidades? (diagrama de classes)'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
     },
     {
       "id_regra": "As novas especificações, modelos e protótipos foram aprovados pelo cliente?",
       "tipo_arquivo": "word",
       "pasta_esperada": "6.Gerenciamento de Projeto/Atas",
       "nome_arquivo_base": "{SIGLA} - Ata de Reunião",
-      "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise a Ata de Reunião. Ignore colchetes '[...]'. Responda à pergunta: 'As novas especificações, modelos e protótipos foram aprovados pelo cliente?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "obrigatorio": false,
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise as Atas de Reunião extraídas. Verifique se há registro de reuniões de acompanhamento, revisão ou validação de especificações, protótipos, arquitetura ou entregas com os participantes. No template do SpinOff não há campo de assinatura física, bastando o registro dos participantes e assuntos tratados na ata. Se houver atas registradas, aprove com 'Sim'. Responda à pergunta: 'As novas especificações, modelos e protótipos foram aprovados pelo cliente?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
     },
     {
       "id_regra": "O caso de uso/história de usuário escolhido para definir e testar a arquitetura foi especificado?",
       "tipo_arquivo": "word",
       "pasta_esperada": "1.Requisitos/Casos de Uso",
-      "nome_arquivo_base": "{SIGLA} - Historia de Usuario",
+      "nome_arquivo_base": "{SIGLA} - Historia de Usuário",
       "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise a História de Usuário. Ignore colchetes '[...]'. Responda à pergunta: 'O caso de uso/história de usuário escolhido para definir e testar a arquitetura foi especificado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise as Histórias de Usuário extraídas. Na fase de Elaboração do SpinOff, basta que ao menos um caso de uso / história de usuário principal tenha sido especificado com descrição e tabela de cenários de teste de aceitação ('Dado que', 'Quando', 'Então') para validar a arquitetura. Não exija cobertura de todos os casos de uso possíveis do sistema nesta regra. Se houver ao menos uma história de usuário especificada com cenários de teste, aprove com 'Sim'. Responda à pergunta: 'O caso de uso/história de usuário escolhido para definir e testar a arquitetura foi especificado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
     },
     {
-      "id_regra": "Foi atualizado?",
+      "id_regra": "O Glossário foi atualizado?",
       "tipo_arquivo": "word",
       "pasta_esperada": "1.Requisitos",
       "nome_arquivo_base": "{SIGLA} - Glossario",
       "obrigatorio": false,
-      "prompt_ia": "Aja como auditor. Analise o Glossário. Ignore colchetes '[...]'. Responda à pergunta: 'O glossário foi atualizado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise o Glossário. Se estiver preenchido com termos claros, responda 'Sim'. Responda à pergunta: 'O glossário foi atualizado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente / Não se aplica]"
     },
     {
       "id_regra": "Foram criados diagramas de classes, de arquitetura, de pacotes e de deployment?",
       "tipo_arquivo": "uml",
       "pasta_esperada": "2.Analise e Design",
-      "nome_arquivo_base": "{SIGLA} - Modelos Analise e Design",
+      "nome_arquivo_base": "{SIGLA} - Modelo de Análise e Design",
       "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise o diagrama UML. Responda à pergunta: 'Foram criados diagramas de classes, de arquitetura, de pacotes e de deployment?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise os elementos extraídos do arquivo Astah (.asta). No template UML do SpinOff, os diagramas de arquitetura e de pacotes são representados na estrutura '3.Arquitetura' / 'Diagrama de Pacotes' / 'Arquitetura Backend/Frontend' (com pacotes controller, service, repository, model, dto, view), o diagrama de classes em '2.Design' / 'Modelo de Objetos', e o deployment em '4.Deployment' / 'Deployment Diagram' / 'implantação'. Se esses elementos estiverem presentes na extração, aprove com 'Sim'. Responda à pergunta: 'Foram criados diagramas de classes, de arquitetura, de pacotes e de deployment?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Cite qual diagrama faltou ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
     },
     {
       "id_regra": "Os requisitos suplementares (não funcionais) foram especificados e utilizados na definição da arquitetura?",
       "tipo_arquivo": "word",
       "pasta_esperada": "1.Requisitos",
       "nome_arquivo_base": "{SIGLA} - Visão",
-      "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise o documento Visão. Ignore colchetes '[...]'. Responda à pergunta: 'Os requisitos suplementares (não funcionais) foram especificados e utilizados na definição da arquitetura?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "obrigatorio": false,
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise o Documento Visão. Verifique se há menção a restrições tecnológicas, requisitos não funcionais ou tecnologias arquiteturais na seção de Restrições/Visão. Se houver restrições tecnológicas ou requisitos descritos, responda 'Sim' (ou 'Não se aplica' caso o template enxuto não exija seção separada). Responda à pergunta: 'Os requisitos suplementares (não funcionais) foram especificados e utilizados na definição da arquitetura?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente / Não se aplica]"
     },
     {
       "id_regra": "Foi criado o Modelo de Negócio (diagrama de classes com todas as entidades identificadas) ou um DER (diagrama de entidade relacionamento)",
       "tipo_arquivo": "uml",
       "pasta_esperada": "2.Analise e Design",
-      "nome_arquivo_base": "{SIGLA} - Modelos Analise e Design",
+      "nome_arquivo_base": "{SIGLA} - Modelo de Análise e Design",
       "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise o diagrama UML. Responda à questão: 'Foi criado o Modelo de Negócio (diagrama de classes com todas as entidades identificadas) ou um DER (diagrama de entidade relacionamento)'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise o modelo UML Astah extraído. Verifique se existe o 'Modelo de Objetos' / '2.Design' contendo as classes de entidade do domínio (ex: Usuario, Tag, Post, Caderno, Anotacao, etc.) e seus atributos. Se existir, aprove com 'Sim'. Responda à questão: 'Foi criado o Modelo de Negócio (diagrama de classes com todas as entidades identificadas) ou um DER (diagrama de entidade relacionamento)'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
     },
     {
       "id_regra": "Foi feito o planejamento do Sprint?",
@@ -103,26 +103,26 @@
       "pasta_esperada": "6.Gerenciamento de Projeto",
       "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
       "obrigatorio": true,
-      "aba_planilha": "Backlog_Sprint",
-      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Sprint. Responda à pergunta: 'Foi feito o planejamento do Sprint?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "aba_planilha": "Planejamento, Entregas, Backlog_Produto",
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise as abas 'Planejamento', 'Entregas' e 'Backlog_Produto' da planilha de Planejamento e Controle do Projeto. Verifique se há entregas planejadas para o Sprint de Elaboração (Sprint 2) na aba Entregas e atividades de Elaboração com estimativa de horas na TABELA 1 do Backlog_Produto. Se estiverem preenchidas, aprove com 'Sim'. Responda à pergunta: 'Foi feito o planejamento do Sprint?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
     },
     {
       "id_regra": "Foi refeita a estimativa e a priorização no Backlog do Sprint?",
       "tipo_arquivo": "excel",
       "pasta_esperada": "6.Gerenciamento de Projeto",
       "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
-      "obrigatorio": true,
-      "aba_planilha": "Backlog_Sprint",
-      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Sprint. Responda à pergunta: 'Foi refeita a estimativa e a priorização no Backlog do Sprint?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "obrigatorio": false,
+      "aba_planilha": "Backlog_Produto, Entregas",
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise as abas 'Backlog_Produto' e 'Entregas'. Se as estimativas de esforço (horas na TABELA 1) e prioridades VRDC (na TABELA 2) estiverem preenchidas, responda 'Sim' (ou 'Não se aplica' caso não tenha sido necessário reestimar). Responda à pergunta: 'Foi refeita a estimativa e a priorização no Backlog do Sprint?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente / Não se aplica]"
     },
     {
       "id_regra": "No Backlog do Produto foi incluído mais alguma atividade, estimado e priorizado?",
       "tipo_arquivo": "excel",
       "pasta_esperada": "6.Gerenciamento de Projeto",
       "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
-      "obrigatorio": true,
+      "obrigatorio": false,
       "aba_planilha": "Backlog_Produto",
-      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Produto. Responda à pergunta: 'No Backlog do Produto foi incluído mais alguma atividade, estimado e priorizado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise a aba 'Backlog_Produto'. Verifique se todas as atividades na TABELA 1 possuem estimativa de horas e todos os casos de uso na TABELA 2 possuem priorização VRDC preenchida. Se estiverem estimados e priorizados, responda 'Sim'. Responda à pergunta: 'No Backlog do Produto foi incluído mais alguma atividade, estimado e priorizado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente / Não se aplica]"
     },
     {
       "id_regra": "O plano de entregas foi atualizado?",
@@ -131,42 +131,42 @@
       "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
       "obrigatorio": true,
       "aba_planilha": "Entregas",
-      "prompt_ia": "Aja como auditor. Analise a aba Entregas. Responda à pergunta: 'O plano de entregas foi atualizado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise a seção '[PLANO DE ENTREGAS POR SPRINT]' da aba 'Entregas'. Verifique se os Sprints possuem entregas, datas previstas, status ('Entregue', 'Em execução', 'Planejado') e horas realizadas registradas nos sprints concluídos. Se a aba Entregas estiver preenchida e atualizada, aprove com 'Sim'. Responda à pergunta: 'O plano de entregas foi atualizado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
     },
     {
       "id_regra": "O plano de gerenciamento de riscos foi atualizado?",
       "tipo_arquivo": "excel",
       "pasta_esperada": "6.Gerenciamento de Projeto",
       "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
-      "obrigatorio": true,
+      "obrigatorio": false,
       "aba_planilha": "Riscos",
-      "prompt_ia": "Aja como auditor. Analise a aba Riscos. Responda à pergunta: 'O plano de gerenciamento de riscos foi atualizado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise a '[LISTA DE RISCOS DO PROJETO E PLANOS DE AÇÃO]' na aba 'Riscos'. Se a lista de riscos estiver preenchida com Probabilidade, Impacto, Perda Esperada, Situação e Planos de Mitigação/Contingência, aprove com 'Sim'. Responda à pergunta: 'O plano de gerenciamento de riscos foi atualizado?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente / Não se aplica]"
     },
     {
       "id_regra": "Foram feitas as reuniões de Revisão do Produto e Processo?",
       "tipo_arquivo": "word",
       "pasta_esperada": "6.Gerenciamento de Projeto/Atas",
       "nome_arquivo_base": "{SIGLA} - Ata de Reunião",
-      "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise a Ata de Reunião. Ignore colchetes '[...]'. Responda à pergunta: 'Foram feitas as reuniões de Revisão do Produto e Processo?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "obrigatorio": false,
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise as Atas de Reunião extraídas da pasta '6.Gerenciamento de Projeto/Atas'. Verifique se existem atas registrando reuniões ao longo do projeto tratando do acompanhamento das entregas, revisão de artefatos, arquitetura ou sprints. Se houver atas registrando essas reuniões, aprove com 'Sim'. Responda à pergunta: 'Foram feitas as reuniões de Revisão do Produto e Processo?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
     },
     {
       "id_regra": "As mudanças de escopo foram registradas no Backlog do produto?",
       "tipo_arquivo": "excel",
       "pasta_esperada": "6.Gerenciamento de Projeto",
       "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
-      "obrigatorio": true,
+      "obrigatorio": false,
       "aba_planilha": "Backlog_Produto",
-      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Produto. Responda à pergunta: 'As mudanças de escopo foram registradas no Backlog do produto?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise a aba 'Backlog_Produto'. No SpinOff, se o Backlog_Produto estiver completo com todas as atividades na TABELA 1 e casos de uso na TABELA 2, responda 'Sim' (ou 'Não se aplica' caso não tenha ocorrido mudança de escopo). Nunca reprove caso não tenha ocorrido mudança de escopo. Responda à pergunta: 'As mudanças de escopo foram registradas no Backlog do produto?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente / Não se aplica]"
     },
     {
       "id_regra": "Há rastreabilidade (histórico do que foi alterado) das mudanças?",
       "tipo_arquivo": "excel",
       "pasta_esperada": "6.Gerenciamento de Projeto",
       "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
-      "obrigatorio": true,
-      "aba_planilha": "Backlog_Produto",
-      "prompt_ia": "Aja como auditor. Analise a aba Backlog_Produto. Responda à pergunta: 'Há rastreabilidade (histórico do que foi alterado) das mudanças?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "obrigatorio": false,
+      "aba_planilha": "Backlog_Produto, Entregas",
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise as abas 'Backlog_Produto' e 'Entregas'. Se o controle de entregas por sprint (com datas previstas, realizadas, status e versões na aba Entregas) estiver devidamente registrado, responda 'Sim' (ou 'Não se aplica' caso não tenha ocorrido mudança de escopo). Responda à pergunta: 'Há rastreabilidade (histórico do que foi alterado) das mudanças?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente / Não se aplica]"
     }
   ]
 }

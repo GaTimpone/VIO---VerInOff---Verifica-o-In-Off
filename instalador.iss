@@ -1,7 +1,7 @@
 ; Script Inno Setup para VIO com Automação de IA nativa via PowerShell
 
 #define MyAppName "VIO"
-#define MyAppVersion "0.1"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "SpinOff"
 #define MyAppURL "http://arum.tec.br/SpinOff/index.htm"
 #define MyAppExeName "vio.exe"
@@ -31,34 +31,39 @@ brazilianportuguese.ReadyLabel2a=O assistente está pronto para instalar o VIO.%
 english.ReadyLabel2a=Setup is ready to install VIO.%n%nNOTE: If your system lacks Ollama or the Phi-3 model, they will be downloaded and configured automatically. Make sure you are connected to the internet.
 
 [Files]
-Source: "C:\Users\gabri\OneDrive\Documentos\GitHub\VIO - VerInOff - Verificação In Off\target\release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\gabri\OneDrive\Documentos\GitHub\VIO - VerInOff - Verificação In Off\config_rules\*"; DestDir: "{app}\config_rules"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "target\release\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "config_rules\iniciacao.json"; DestDir: "{app}\config_rules"; Flags: ignoreversion
+Source: "config_rules\elaboracao.json"; DestDir: "{app}\config_rules"; Flags: ignoreversion
+Source: "config_rules\construcao.json"; DestDir: "{app}\config_rules"; Flags: ignoreversion
+Source: "config_rules\transicao.json"; DestDir: "{app}\config_rules"; Flags: ignoreversion
 
 [Registry]
 Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}"; Check: NeedsAddPath(ExpandConstant('{app}'))
 
 [Run]
-; 1. Se o Ollama não existir, o PowerShell baixa da web e roda a instalação silenciosa
-Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""& {{ Write-Host 'Baixando instalador oficial do Ollama...'; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://ollama.com/download/OllamaSetup.exe' -OutFile '$env:TEMP\OllamaSetup.exe'; Write-Host 'Instalando motor Ollama...'; Start-Process -FilePath '$env:TEMP\OllamaSetup.exe' -ArgumentList '/silent' -Wait; Remove-Item '$env:TEMP\OllamaSetup.exe' -ErrorAction SilentlyContinue }}"""; StatusMsg: "Baixando e instalando o motor Ollama (IA)..."; Flags: waituntilterminated; Check: not OllamaExiste
+; 1. Se o Ollama não existir, baixa e roda a instalação silenciosa (Nota: no Inno Setup, '{{' escapa '{', mas '}' não deve ser duplicado)
+Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""& {{ Write-Host 'Baixando instalador oficial do Ollama...'; $installer = Join-Path $env:TEMP 'OllamaSetup.exe'; if (Get-Command curl.exe -ErrorAction SilentlyContinue) {{ & curl.exe -fSL -o $installer 'https://ollama.com/download/OllamaSetup.exe' } else {{ $ProgressPreference = 'SilentlyContinue'; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -UseBasicParsing -Uri 'https://ollama.com/download/OllamaSetup.exe' -OutFile $installer }; if (Test-Path $installer) {{ Write-Host 'Instalando motor Ollama...'; Start-Process -FilePath $installer -ArgumentList '/VERYSILENT /NORESTART' -Wait; Remove-Item $installer -ErrorAction SilentlyContinue } }"""; StatusMsg: "Baixando e instalando o motor Ollama (IA)..."; Flags: waituntilterminated; Check: not OllamaExiste
 
 ; 2. Baixa o modelo Phi-3 exibindo o progresso no terminal
-Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""& {{ Write-Host 'Configurando modelo de IA Phi-3 para o VIO...'; ollama pull phi3; if ($LASTEXITCODE -ne 0) {{ & $env:LOCALAPPDATA\Programs\Ollama\ollama.exe pull phi3 }} }}"""; StatusMsg: "Baixando o modelo Phi-3 (necessário acesso à internet)..."; Flags: waituntilterminated
+Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -Command ""& {{ Write-Host 'Configurando modelo de IA Phi-3 para o VIO...'; $ollamaBin = if (Get-Command ollama -ErrorAction SilentlyContinue) {{ 'ollama' } else {{ Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama.exe' }; if (Test-Path $ollamaBin -ErrorAction SilentlyContinue) {{ Start-Process -FilePath $ollamaBin -ArgumentList 'serve' -WindowStyle Hidden -ErrorAction SilentlyContinue; Start-Sleep -Seconds 3; & $ollamaBin pull phi3 } else {{ ollama pull phi3 } }"""; StatusMsg: "Baixando o modelo Phi-3 (necessário acesso à internet)..."; Flags: waituntilterminated
 
 [Code]
 function NeedsAddPath(Param: string): boolean;
 var
   OrigPath: string;
 begin
-  if not RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment', 'Path', OrigPath) then
-  begin
+  if not RegQueryStringValue(HKEY_LOCAL_MACHINE,
+    'SYSTEM\CurrentControlSet\Control\Session Manager\Environment',
+    'Path', OrigPath)
+  then begin
     Result := True;
     exit;
   end;
-  Result := Pos(';' + Param + ';', ';' + OrigPath + ';') = 0;
+  Result := Pos(';' + LowerCase(Param) + ';', ';' + LowerCase(OrigPath) + ';') = 0;
 end;
 
 function OllamaExiste(): Boolean;
 begin
-  Result := FileExists(FileSearch('ollama.exe', GetEnv('PATH'))) or 
+  Result := FileExists(FileSearch('ollama.exe', GetEnv('PATH'))) or
             FileExists(ExpandConstant('{localappdata}\Programs\Ollama\ollama.exe'));
 end;

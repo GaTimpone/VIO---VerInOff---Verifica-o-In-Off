@@ -15,7 +15,25 @@
       "pasta_esperada": "1.Requisitos",
       "nome_arquivo_base": "{SIGLA} - Visão",
       "obrigatorio": true,
-      "prompt_ia": "Aja como auditor. Analise o documento Visão. Ignore colchetes '[...]'. Responda à pergunta: 'O objetivo, os problemas e as necessidades do cliente estão claras?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [3 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente][Termine imediatamente a resposta]"
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise o documento Visão. Ignore instruções entre colchetes '[...]'. Verifique se o objetivo, os problemas e as necessidades estão descritos. Responda: 'O objetivo, os problemas e as necessidades do cliente estão claras?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
+    },
+    {
+      "id_regra": "O arquivo Protótipo foi armazenado na pasta correta?",
+      "tipo_arquivo": "word",
+      "pasta_esperada": "1.Requisitos/Prototipo",
+      "nome_arquivo_base": "{SIGLA} - Prototipo",
+      "obrigatorio": false,
+      "apenas_existencia": true,
+      "prompt_ia": ""
+    },
+    {
+      "id_regra": "A equipe foi definida com seus respectivos e-mails?",
+      "tipo_arquivo": "excel",
+      "pasta_esperada": "6.Gerenciamento de Projeto",
+      "nome_arquivo_base": "{SIGLA} - Planejamento e Controle do Projeto",
+      "obrigatorio": true,
+      "aba_planilha": "Equipe",
+      "prompt_ia": "Aja como auditor do processo SpinOff. Analise a aba Equipe. Verifique se há integrantes e e-mails cadastrados. Responda: 'A equipe foi definida com seus respectivos e-mails?'. RESPONDA ESTRITAMENTE NESTE FORMATO:\nAnálise: [Breve análise em até 2 frases]\nDesvio: [Descreva o problema ou 'Nenhum']\nSugestão: [Sugestão de melhoria ou 'Nenhuma']\nStatus Qualitativo: [Sim / Não / Parcialmente]"
     }
   ]
 }
